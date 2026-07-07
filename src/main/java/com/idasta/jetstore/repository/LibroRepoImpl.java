@@ -1,13 +1,17 @@
 package com.idasta.jetstore.repository;
 
+import com.idasta.jetstore.dto.FiltroLibroDTO;
 import com.idasta.jetstore.dto.VerLibroDTO;
 import com.idasta.jetstore.helper.Jetstore;
 import com.idasta.jetstore.model.Categoria;
+import com.idasta.jetstore.model.Libro;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class LibroRepoImpl implements LibroRepoCustom{
@@ -56,7 +60,63 @@ public class LibroRepoImpl implements LibroRepoCustom{
 
     @Override
     public List<VerLibroDTO> listarLibros() {
-        return em.createQuery("SELECT new com.idasta.jetstore.dto.VerLibroDTO(l.id, l.titulo, l.autor, l.categoria.nombre, l.precio, l.formato, l.stock) FROM Libro l", VerLibroDTO.class)
+        return em.createQuery("SELECT new com.idasta.jetstore.dto.VerLibroDTO(l.id, l.titulo, l.autor, l.categoria.nombre, l.precio, l.formato, l.stock, l.fechaCreacion) FROM Libro l ORDER BY l.fechaCreacion DESC", VerLibroDTO.class)
+                .getResultList();
+    }
+
+    @Override
+    public List<Libro> filtrarLibros(FiltroLibroDTO dto) {
+        StringBuilder jpql = new StringBuilder("SELECT l FROM Libro l WHERE 1=1");
+        Map<String, Object> parametros = new HashMap<>();
+
+        if(dto.categoria() != null){
+            jpql.append(" AND l.categoria.nombre = :categoria");
+            parametros.put("categoria", dto.categoria());
+        }
+        if(dto.formato() != null){
+            jpql.append(" AND l.formato = :formato");
+            parametros.put("formato", dto.formato());
+        }
+        if(dto.precioDesde() != null){
+            jpql.append(" AND l.precio >= :precioDesde");
+            parametros.put("precioDesde", dto.precioDesde());
+        }
+        if(dto.precioHasta() != null){
+            jpql.append(" AND l.precio <= :precioHasta");
+            parametros.put("precioHasta", dto.precioHasta());
+        }
+
+        var query = em.createQuery(jpql.toString(), Libro.class);
+        for(var entry : parametros.entrySet()){
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Libro> buscarPorKeyword(String keyword) {
+        return em.createQuery(
+                "SELECT l FROM Libro l WHERE LOWER(l.titulo) LIKE LOWER(:kw) OR LOWER(l.autor) LIKE LOWER(:kw) ORDER BY l.fechaCreacion DESC",
+                Libro.class)
+                .setParameter("kw", "%" + keyword + "%")
+                .getResultList();
+    }
+
+    @Override
+    public List<Libro> listarPorCategoria(String categoria) {
+        return em.createQuery(
+                "SELECT l FROM Libro l WHERE l.categoria.nombre = :cat ORDER BY l.fechaCreacion DESC",
+                Libro.class)
+                .setParameter("cat", categoria)
+                .getResultList();
+    }
+
+    @Override
+    public List<Libro> listarMasRecientes() {
+        return em.createQuery(
+                "SELECT l FROM Libro l ORDER BY l.fechaCreacion DESC",
+                Libro.class)
+                .setMaxResults(20)
                 .getResultList();
     }
 }

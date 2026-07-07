@@ -5,10 +5,10 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -42,5 +42,13 @@ public class Libro {
     @Min(0)
     private int stock;
 
+    @Column(nullable = false)
+    private LocalDateTime fechaCreacion;
+
     public Libro(){}
+
+    @PrePersist
+    private void prePersist() {
+        fechaCreacion = LocalDateTime.now();
+    }
 }

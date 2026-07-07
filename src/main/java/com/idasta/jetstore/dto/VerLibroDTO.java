@@ -1,6 +1,7 @@
 package com.idasta.jetstore.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public record VerLibroDTO(
         Long id,
@@ -9,6 +10,7 @@ public record VerLibroDTO(
         String categoria,
         BigDecimal precio,
         String formato,
-        int stock
+        int stock,
+        LocalDateTime fechaCreacion
 ) {
 }

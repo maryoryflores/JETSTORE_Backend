@@ -8,6 +8,6 @@ public class Util {
         return Paths.get("src/main/java/com/idasta/jetstore/" + ruta.trim());
     }
     public static boolean esNullVacio(String txt){
-        return (txt.isBlank() || txt == null);
+        return (txt == null || txt.isBlank());
     }
 }
