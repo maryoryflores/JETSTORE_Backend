@@ -8,6 +8,8 @@ import com.idasta.jetstore.model.Usuario;
 import com.idasta.jetstore.repository.RolRepo;
 import com.idasta.jetstore.repository.SesionRepo;
 import com.idasta.jetstore.repository.UsuarioRepo;
+
+import java.util.List;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -75,10 +77,18 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     @Override
     public void cerrarSesion(String token) {
-        sesionRepo.findByTokenAndActivaTrue(token).ifPresent(sesion -> {
+        String cleanToken = token.replace("Bearer ", "");
+        sesionRepo.findByTokenAndActivaTrue(cleanToken).ifPresent(sesion -> {
             sesion.setActiva(false);
             sesionRepo.save(sesion);
         });
+    }
+
+    @Override
+    public List<UsuarioPerfilDTO> listarUsuarios() {
+        return usuarioRepo.findAllByOrderByNombreUsuarioAsc().stream()
+                .map(this::toPerfil)
+                .toList();
     }
 
     private UsuarioPerfilDTO toPerfil(Usuario usuario) {

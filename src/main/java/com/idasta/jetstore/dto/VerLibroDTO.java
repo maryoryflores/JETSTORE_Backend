@@ -10,6 +10,7 @@ public record VerLibroDTO(
         String categoria,
         BigDecimal precio,
         String formato,
+        String imagen,
         int stock,
         LocalDateTime fechaCreacion
 ) {

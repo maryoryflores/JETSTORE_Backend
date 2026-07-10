@@ -16,6 +16,10 @@ public interface LibroRepoCustom {
 
     List<Categoria> buscarCategoriaNombre(String nombre);
 
+    List<Categoria> listarCategorias();
+
+    VerLibroDTO obtenerLibroPorId(Long id);
+
     List<VerLibroDTO> listarLibros();
 
     List<Libro> filtrarLibros(FiltroLibroDTO dto);

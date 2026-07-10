@@ -59,4 +59,14 @@ public class LibroController {
     public ResponseEntity<?> masRecientes(){
         return ResponseEntity.ok(new RespuestaApi(true, "Libros mas recientes", service.listarMasRecientes()));
     }
+
+    @GetMapping("ver/{id}")
+    public ResponseEntity<?> obtenerPorId(@PathVariable Long id){
+        return ResponseEntity.ok(new RespuestaApi(true, "Libro obtenido", service.obtenerPorId(id)));
+    }
+
+    @GetMapping("categorias")
+    public ResponseEntity<?> listarCategorias(){
+        return ResponseEntity.ok(new RespuestaApi(true, "Lista de categorias", service.listarCategorias()));
+    }
 }

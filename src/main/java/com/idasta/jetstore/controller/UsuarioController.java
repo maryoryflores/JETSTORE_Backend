@@ -39,4 +39,9 @@ public class UsuarioController {
         usuarioService.cerrarSesion(token);
         return ResponseEntity.ok(new RespuestaApi(true, "Sesion cerrada", null));
     }
+
+    @GetMapping("todos")
+    public ResponseEntity<?> listarUsuarios() {
+        return ResponseEntity.ok(new RespuestaApi(true, "Lista de usuarios", usuarioService.listarUsuarios()));
+    }
 }

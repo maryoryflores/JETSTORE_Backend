@@ -59,8 +59,24 @@ public class LibroRepoImpl implements LibroRepoCustom{
     }
 
     @Override
+    public List<Categoria> listarCategorias() {
+        return em.createQuery("SELECT c FROM Categoria c ORDER BY c.nombre ASC", Categoria.class)
+                .getResultList();
+    }
+
+    @Override
+    public VerLibroDTO obtenerLibroPorId(Long id) {
+        List<VerLibroDTO> result = em.createQuery(
+                "SELECT new com.idasta.jetstore.dto.VerLibroDTO(l.id, l.titulo, l.autor, l.categoria.nombre, l.precio, l.formato, l.imagen, l.stock, l.fechaCreacion) FROM Libro l WHERE l.id = :id",
+                VerLibroDTO.class)
+                .setParameter("id", id)
+                .getResultList();
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    @Override
     public List<VerLibroDTO> listarLibros() {
-        return em.createQuery("SELECT new com.idasta.jetstore.dto.VerLibroDTO(l.id, l.titulo, l.autor, l.categoria.nombre, l.precio, l.formato, l.stock, l.fechaCreacion) FROM Libro l ORDER BY l.fechaCreacion DESC", VerLibroDTO.class)
+        return em.createQuery("SELECT new com.idasta.jetstore.dto.VerLibroDTO(l.id, l.titulo, l.autor, l.categoria.nombre, l.precio, l.formato, l.imagen, l.stock, l.fechaCreacion) FROM Libro l ORDER BY l.fechaCreacion DESC", VerLibroDTO.class)
                 .getResultList();
     }
 

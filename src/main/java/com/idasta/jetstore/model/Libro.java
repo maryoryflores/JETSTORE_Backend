@@ -39,6 +39,10 @@ public class Libro {
     private String formato;
 
     @Column
+    @Size(max = 255)
+    private String imagen;
+
+    @Column
     @Min(0)
     private int stock;
 

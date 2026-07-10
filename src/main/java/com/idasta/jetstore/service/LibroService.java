@@ -16,4 +16,6 @@ public interface LibroService {
     List<VerLibroDTO> buscar(String keyword);
     List<VerLibroDTO> listarPorCategoria(String categoria);
     List<VerLibroDTO> listarMasRecientes();
+    VerLibroDTO obtenerPorId(Long id);
+    List<String> listarCategorias();
 }

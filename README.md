@@ -121,6 +121,8 @@ Las tablas se crean automáticamente (`ddl-auto=create-drop`). Los roles `ADMIN`
 | GET | `/libro/todos` | - |
 | GET | `/libro/buscar?q=keyword` | - |
 | POST | `/libro/filtrar` | `{"categoria": "...", "formato": "...", "precioDesde": 0, "precioHasta": 0}` |
+| GET | `/libro/ver/{id}` | - |
+| GET | `/libro/categorias` | - |
 | GET | `/libro/categoria/{nombre}` | - |
 | GET | `/libro/recientes` | - |
 

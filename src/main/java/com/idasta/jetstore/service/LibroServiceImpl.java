@@ -24,17 +24,31 @@ public class LibroServiceImpl implements LibroService{
     @Transactional
     @Override
     public void guardar(GuardarLibroDTO dto) {
-        Libro libro = Mapear.libro(dto);
-        if(dto.categoria()==null){
+        Libro libro;
+
+        if (dto.id() != null) {
+            libro = repo.findById(dto.id())
+                    .orElseThrow(() -> new IllegalArgumentException("Libro no encontrado"));
+            libro.setTitulo(dto.titulo());
+            libro.setAutor(dto.autor());
+            libro.setPrecio(dto.precio());
+            libro.setFormato(dto.formato());
+            libro.setImagen(dto.imagen());
+            libro.setStock(dto.stock());
+        } else {
+            libro = Mapear.libro(dto);
+        }
+
+        if (dto.categoria() == null) {
             libro.setCategoria(repo.CategoriaGenerica());
-        }else {
+        } else {
             String nombreCat = dto.categoria().nombre();
             List<Categoria> existentes = repo.buscarCategoriaNombre(nombreCat);
             Categoria cat;
-            if(existentes.isEmpty()){
+            if (existentes.isEmpty()) {
                 cat = Mapear.categoria(dto.categoria());
                 repo.crearCategoria(cat);
-            }else{
+            } else {
                 cat = existentes.get(0);
             }
             libro.setCategoria(cat);
@@ -94,10 +108,26 @@ public class LibroServiceImpl implements LibroService{
                 .toList();
     }
 
+    @Override
+    public VerLibroDTO obtenerPorId(Long id) {
+        VerLibroDTO dto = repo.obtenerLibroPorId(id);
+        if (dto == null) {
+            throw new IllegalArgumentException("Libro no encontrado");
+        }
+        return dto;
+    }
+
+    @Override
+    public List<String> listarCategorias() {
+        return repo.listarCategorias().stream()
+                .map(Categoria::getNombre)
+                .toList();
+    }
+
     private VerLibroDTO toDTO(Libro l) {
         return new VerLibroDTO(
                 l.getId(), l.getTitulo(), l.getAutor(),
                 l.getCategoria().getNombre(), l.getPrecio(),
-                l.getFormato(), l.getStock(), l.getFechaCreacion());
+                l.getFormato(), l.getImagen(), l.getStock(), l.getFechaCreacion());
     }
 }

@@ -12,6 +12,7 @@ public class Mapear {
         libro.setAutor(dto.autor());
         libro.setPrecio(dto.precio());
         libro.setFormato(dto.formato());
+        libro.setImagen(dto.imagen());
         libro.setStock(dto.stock());
 
         return libro;
