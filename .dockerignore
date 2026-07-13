@@ -1,0 +1,8 @@
+target
+.mvn
+!.mvn/wrapper
+*.jar
+*.class
+node_modules
+.idea
+.git

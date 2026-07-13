@@ -32,7 +32,7 @@ class LibroServiceImplTest {
 
     @Test
     void guardar_conCategoriaNull_asignaGenerica() {
-        var dto = new GuardarLibroDTO("Libro", "Autor", null, BigDecimal.TEN, "PDF", 5);
+        var dto = new GuardarLibroDTO(null, "Libro", "Autor", null, BigDecimal.TEN, "PDF", null, 5);
         Categoria generica = new Categoria();
         generica.setId(1L);
         generica.setNombre("Generica");
@@ -48,7 +48,7 @@ class LibroServiceImplTest {
 
     @Test
     void guardar_conCategoriaNueva_laCrea() {
-        var dto = new GuardarLibroDTO("Libro", "Autor", new GuardarCategoriaDTO("Nueva"), BigDecimal.TEN, "PDF", 5);
+        var dto = new GuardarLibroDTO(null, "Libro", "Autor", new GuardarCategoriaDTO("Nueva"), BigDecimal.TEN, "PDF", null, 5);
         when(repo.buscarCategoriaNombre("Nueva")).thenReturn(List.of());
 
         service.guardar(dto);
@@ -59,7 +59,7 @@ class LibroServiceImplTest {
 
     @Test
     void guardar_conCategoriaExistente_laReusa() {
-        var dto = new GuardarLibroDTO("Libro", "Autor", new GuardarCategoriaDTO("Existente"), BigDecimal.TEN, "PDF", 5);
+        var dto = new GuardarLibroDTO(null, "Libro", "Autor", new GuardarCategoriaDTO("Existente"), BigDecimal.TEN, "PDF", null, 5);
         Categoria existente = new Categoria();
         existente.setId(1L);
         existente.setNombre("Existente");
@@ -75,7 +75,7 @@ class LibroServiceImplTest {
 
     @Test
     void verLibros_delegaAlRepo() {
-        var esperado = List.of(new VerLibroDTO(1L, "T", "A", "Cat", BigDecimal.TEN, "PDF", 5, null));
+        var esperado = List.of(new VerLibroDTO(1L, "T", "A", "Cat", BigDecimal.TEN, "PDF", null, 5, null));
         when(repo.listarLibros()).thenReturn(esperado);
 
         var resultado = service.verLibros();
