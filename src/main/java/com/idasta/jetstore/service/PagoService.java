@@ -8,4 +8,6 @@ import com.idasta.jetstore.dto.VentaResponseDTO;
 public interface PagoService {
     PagoResponseDTO procesar(PagarRequestDTO dto);
     VentaResponseDTO confirmar(ConfirmarPagoDTO dto);
+    com.idasta.jetstore.dto.MercadoPagoPreferenceDTO crearPreferenciaMercadoPago(PagarRequestDTO dto);
+    VentaResponseDTO confirmarMercadoPago(String mpPaymentId, String externalReference);
 }

@@ -2,7 +2,6 @@ package com.idasta.jetstore.repository;
 
 import com.idasta.jetstore.dto.FiltroLibroDTO;
 import com.idasta.jetstore.dto.VerLibroDTO;
-import com.idasta.jetstore.helper.Jetstore;
 import com.idasta.jetstore.model.Categoria;
 import com.idasta.jetstore.model.Libro;
 import jakarta.persistence.EntityManager;
@@ -38,7 +37,7 @@ public class LibroRepoImpl implements LibroRepoCustom{
 
     @Override
     public Categoria CategoriaGenerica() {
-        String nombreGenerico = Jetstore.config().get("categoriaGenerica").toString();
+        String nombreGenerico = "General";
 
         Categoria generic = new Categoria();
         generic.setNombre(nombreGenerico);

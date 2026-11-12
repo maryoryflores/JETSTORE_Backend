@@ -21,7 +21,8 @@ public class Venta {
     private Long id;
 
     @Setter
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     @NotNull
     private Usuario usuario;
 

@@ -19,4 +19,8 @@ public class Categoria {
     @Column
     @Size(max = 255)
     private String nombre;
+
+    @Column(length = 500)
+    @Size(max = 500)
+    private String descripcion;
 }

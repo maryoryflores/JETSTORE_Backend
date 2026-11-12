@@ -1,5 +1,5 @@
 package com.idasta.jetstore.model;
 
 public enum MetodoPago {
-    TARJETA, YAPE, PLIN
+    TARJETA, YAPE, PLIN, MERCADOPAGO
 }

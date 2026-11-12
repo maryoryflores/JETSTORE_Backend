@@ -17,8 +17,8 @@ public class Pago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "carrito_id", nullable = false, unique = true)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "carrito_id", nullable = false)
     private Carrito carrito;
 
     @OneToOne
@@ -39,6 +39,15 @@ public class Pago {
 
     @Column(length = 100)
     private String referencia;
+
+    @Column(length = 150)
+    private String mpPreferenceId;
+
+    @Column(length = 150)
+    private String mpPaymentId;
+
+    @Column(length = 500)
+    private String mpInitPoint;
 
     @Column(nullable = false)
     private LocalDateTime fechaCreacion;

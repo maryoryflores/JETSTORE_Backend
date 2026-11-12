@@ -21,12 +21,15 @@ src/main/java/com/idasta/jetstore/
 │   ├── UsuarioController.java
 │   ├── CarritoController.java
 │   ├── PagoController.java
-│   └── RolController.java
+│   ├── RolController.java
+│   └── PasswordRecoveryController.java
 ├── service/                          # Lógica de negocio
 │   ├── LibroService.java / Impl
 │   ├── UsuarioService.java / Impl
 │   ├── CarritoService.java / Impl
-│   └── PagoService.java / Impl
+│   ├── PagoService.java / Impl
+│   ├── PasswordRecoveryService.java / Impl
+│   └── CorreoService.java / Impl
 ├── repository/                       # Acceso a datos (JPA)
 │   ├── LibroRepo.java (+ Custom / Impl)
 │   ├── UsuarioRepo.java
@@ -34,7 +37,8 @@ src/main/java/com/idasta/jetstore/
 │   ├── PagoRepo.java
 │   ├── VentaRepo.java
 │   ├── RolRepo.java
-│   └── SesionRepo.java
+│   ├── SesionRepo.java
+│   └── RecuperacionRepo.java
 ├── model/                            # Entidades JPA
 │   ├── Libro.java
 │   ├── Categoria.java
@@ -44,6 +48,7 @@ src/main/java/com/idasta/jetstore/
 │   ├── Usuario.java
 │   ├── Rol.java
 │   ├── Sesion.java
+│   ├── Recuperacion.java
 │   └── Cliente.java
 ├── dto/                              # DTOs (record)
 │   ├── GuardarLibroDTO.java
@@ -58,7 +63,9 @@ src/main/java/com/idasta/jetstore/
 │   ├── PagoResponseDTO.java / VentaResponseDTO.java
 │   ├── RegistrarUsuarioDTO.java
 │   ├── LoginDTO.java / LoginResponseDTO.java
-│   └── UsuarioPerfilDTO.java
+│   ├── UsuarioPerfilDTO.java
+│   ├── SolicitarRecuperacionDTO.java
+│   └── RestablecerPasswordDTO.java
 └── helper/
     ├── RespuestaApi.java             # Envoltorio de respuesta {ok, mensaje, payload}
     ├── GlobalExceptionHandler.java   # Manejo global de errores
@@ -82,6 +89,20 @@ spring.datasource.url=jdbc:postgresql://localhost:5432/jetstore
 spring.datasource.username=postgres
 spring.datasource.password=postgres
 ```
+
+### Recuperación de contraseña
+
+Variables de entorno (valores por defecto entre paréntesis):
+
+| Variable | Descripción |
+|----------|-------------|
+| `FRONTEND_URL` (`http://localhost:3000`) | Base del enlace `/reset-password?token=...` enviado al correo |
+| `RECUPERACION_EXPIRACION_HORAS` (`1`) | Horas de validez del enlace |
+| `MAIL_HABILITADO` (`true`) | Habilita/deshabilita el envío de correos |
+| `MAIL_REMITENTE` (`no-responder@jetstore.pe`) | Remitente de los correos |
+| `SPRING_MAIL_HOST`, `SPRING_MAIL_PORT`, `SPRING_MAIL_USERNAME`, `SPRING_MAIL_PASSWORD` | Configuración SMTP (opcional) |
+
+> Sin SMTP configurado, el enlace de recuperación se muestra en la consola del backend. El token es de un solo uso; solicitar uno nuevo invalida los anteriores y restablecer la contraseña cierra las sesiones activas del usuario.
 
 ## Ejecutar
 
@@ -110,6 +131,8 @@ Las tablas se crean automáticamente (`ddl-auto=create-drop`). Los roles `ADMIN`
 | POST | `/usuario/login` | `{"nombreUsuario": "...", "password": "..."}` |
 | GET | `/usuario/perfil/{id}` | - |
 | POST | `/usuario/cerrar-sesion` | Header: `Authorization: <token>` |
+| POST | `/usuario/recuperar` | `{"correo": "..."}` |
+| POST | `/usuario/restablecer` | `{"token": "...", "password": "...", "confirmPassword": "..."}` |
 
 ### Libro
 
